@@ -1,6 +1,12 @@
 const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
+// REQUIRE CONFIG HERE
+const sessionConfig = require('./express-session-config')
+
+// REQUIRE ROUTERS HERE
+const usersRouter = require('./users')
+const authRouter = require('./auth/auth-router')
 
 /**
   Do what needs to be done to support sessions with the `express-session` package!
@@ -20,6 +26,11 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
+server.use(sessionConfig)
+
+// PUT ROUTERS HERE
+server.use('/api/users', usersRouter)
+server.use('/api/auth', authRouter)
 
 server.get("/", (req, res) => {
   res.json({ api: "up" });
