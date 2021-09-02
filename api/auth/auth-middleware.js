@@ -22,9 +22,6 @@ function restricted() {
 */
 async function checkUsernameFree(req, res, next) {
 
-  // TEST FOR WHEN USER EXISTS
-  console.log('in checkUnFree middleware')
-
   const {username} = req.body
 
   try {

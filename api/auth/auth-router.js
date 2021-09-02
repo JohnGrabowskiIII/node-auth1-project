@@ -35,7 +35,15 @@ const router = express.Router()
  */
 
 router.post('/register', checkUsernameFree,  checkPasswordLength, async (req, res) => {
-  res.status(200).json({message: '/api/auth/register post endpoint working'})
+
+  try {
+    const hashedPass = hash.hashSync(req.body.password, 10)
+    const newUser = await add({username: req.body.username, password: hashedPass})
+    res.status(201).json(newUser)
+  } catch(err) {
+    res.status(500).json({message: "Server could not be reached at this time"})
+  }
+  
 })
 
 /**
