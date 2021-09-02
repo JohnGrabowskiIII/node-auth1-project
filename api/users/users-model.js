@@ -4,7 +4,6 @@ const db = require('../../data/db-config')
   resolves to an ARRAY with all users, each user having { user_id, username }
  */
 async function find() {
-  // TEST
   console.log('in find()')
   return db('users').select("user_id", "username").orderBy("user_id")
 }
@@ -13,7 +12,10 @@ async function find() {
   resolves to an ARRAY with all users that match the filter condition
  */
 function findBy(filter) {
-  return db("users").select("user_id", "username").where(filter).orderBy("user_id")
+  // FINDBY NEEDS TO RECIEVE PASSWORD IN QUERY
+  // IT GETS APPENDED TO THE BODY WITH MIDDLEWARE
+  // AND ENDPOINT COMPARES VALUES
+  return db("users").where(filter).orderBy("user_id")
 }
 
 /**

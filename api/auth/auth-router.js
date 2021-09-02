@@ -61,9 +61,23 @@ router.post('/register', checkUsernameFree,  checkPasswordLength, async (req, re
     "message": "Invalid credentials"
   }
  */
-
+// TEST THIS AFTER LOGOUT
+// TEST THIS AFTER LOGOUT
+// TEST TEST TEST
 router.post('/login', checkUsernameExists, checkPasswordLength, async (req, res) => {
-  res.status(200).json({message: '/api/auth/login post endpoint working'})
+
+  try {
+    const isPassEqual = hash.compareSync(req.body.password, req.userInfo.password)
+    if (isPassEqual) {
+      req.session.user = req.userInfo
+      res.status(200).json({message: `Welcome ${req.userInfo.username}`})
+    } else {
+      res.status(401).json({message: "Invalid credentials"})
+    }
+  } catch(err) {
+    res.status(500).json({message: "Server could not be reached at this time"})
+  }
+
 })
 
 /**
@@ -82,8 +96,26 @@ router.post('/login', checkUsernameExists, checkPasswordLength, async (req, res)
   }
  */
 
-router.get('/logout', /* middleware */ (req, res) => {
-  res.status(200).json({message: '/api/auth/logout get endpoint working'})
+router.get('/logout', (req, res) => {
+
+  console.log(req.session ? 'true' : 'false')
+
+  if (req.session) {
+
+    req.session.destroy(err => {
+      req.session = null;
+      // console.log(err)
+      if (err) {
+        res.status(500).json({message: "Could not log out at this time"})
+      } else {
+        res.status(200).json({message: "logged out"})
+      }
+
+    })
+  } else {
+    res.status(200).json({message: "no session"})
+  }
+
 })
  
 // Don't forget to add the router to the `exports` object so it can be required in other modules
