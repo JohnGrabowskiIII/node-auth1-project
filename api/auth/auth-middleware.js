@@ -1,3 +1,5 @@
+const {find, findBy, findById, add} = require('../users/users-model')
+
 /*
   If the user does not have a session saved in the server
 
@@ -18,7 +20,23 @@ function restricted() {
     "message": "Username taken"
   }
 */
-function checkUsernameFree() {
+async function checkUsernameFree(req, res, next) {
+
+  // TEST
+  console.log('in checkUnFree middleware')
+
+  const {username} = req.body
+
+  try {
+    const rows = await findBy({username: username})
+    if (!rows.length) {
+      next()
+    } else {
+      res.status(422).json({message: "Username taken"})
+    }
+  } catch(err) {
+    res.status(500).json({message: "Server could not be reached at this time"})
+  }
 
 }
 
@@ -30,7 +48,24 @@ function checkUsernameFree() {
     "message": "Invalid credentials"
   }
 */
-function checkUsernameExists() {
+async function checkUsernameExists(req, res, next) {
+
+  // TEST
+  console.log('in checkUnExist middleware')
+
+  const {username} = req.body
+
+  try {
+    const rows = await findBy({username: username})
+    if (rows.length) {
+      req.userInfo = rows[0]
+      next()
+    } else {
+      res.status(401).json({message: "Invalid credentials"})
+    }
+  } catch(err) {
+    res.status(500).json({message: "Server could not be reached at this time"})
+  }
 
 }
 
@@ -42,8 +77,28 @@ function checkUsernameExists() {
     "message": "Password must be longer than 3 chars"
   }
 */
-function checkPasswordLength() {
+function checkPasswordLength(req, res, next) {
+
+  // TEST
+  console.log('in checkPass middleware')
+
+  const {password = 0} = req.body
+
+  const passCheck = password && password.length > 3
+
+  if (passCheck) {
+    next()
+  } else {
+    res.status(422).json({message: "Password must be longer than 3 chars"})
+  }
 
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
+
+module.exports = {
+  restricted,
+  checkUsernameFree,
+  checkUsernameExists,
+  checkPasswordLength
+}
