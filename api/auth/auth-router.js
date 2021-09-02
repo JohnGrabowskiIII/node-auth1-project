@@ -98,12 +98,11 @@ router.post('/login', checkUsernameExists, checkPasswordLength, async (req, res)
 
 router.get('/logout', (req, res) => {
 
-  console.log(req.session ? 'true' : 'false')
+  console.log(req.session && req.session.user ? 'true' : 'false')
 
-  if (req.session) {
+  if (req.session && req.session.user) {
 
     req.session.destroy(err => {
-      req.session = null;
       // console.log(err)
       if (err) {
         res.status(500).json({message: "Could not log out at this time"})
