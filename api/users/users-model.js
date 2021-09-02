@@ -13,8 +13,6 @@ function find() {
   resolves to an ARRAY with all users that match the filter condition
  */
 function findBy(filter) {
-  // TEST
-  console.log('in findBy()')
   return db("users").where(filter).orderBy("user_id")
 }
 
@@ -33,7 +31,7 @@ function findById(user_id) {
 /**
   resolves to the newly inserted user { user_id, username }
  */
-function add(user) {
+async function add(user) {
   // TEST
   console.log('in add()')
   const newUser = await db("users").insert(user)

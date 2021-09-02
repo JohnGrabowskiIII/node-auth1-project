@@ -1,8 +1,13 @@
 
 const express = require('express')
+const hash = require('bcryptjs')
+
+const {add} = require('../users/users-model')
 
 // Require `checkUsernameFree`, `checkUsernameExists` and `checkPasswordLength`
 // middleware functions from `auth-middleware.js`. You will need them here!
+
+const {checkUsernameFree, checkUsernameExists, checkPasswordLength} = require('./auth-middleware')
 
 const router = express.Router()
 
@@ -29,8 +34,7 @@ const router = express.Router()
   }
  */
 
-router.post('/register', /* middleware */ (req, res) => {
-  console.log('in /api/auth/register post')
+router.post('/register', checkUsernameFree,  checkPasswordLength, async (req, res) => {
   res.status(200).json({message: '/api/auth/register post endpoint working'})
 })
 
@@ -50,8 +54,7 @@ router.post('/register', /* middleware */ (req, res) => {
   }
  */
 
-router.post('/login', /* middleware */ (req, res) => {
-  console.log('in /api/auth/login post')
+router.post('/login', checkUsernameExists, checkPasswordLength, async (req, res) => {
   res.status(200).json({message: '/api/auth/login post endpoint working'})
 })
 
@@ -72,7 +75,6 @@ router.post('/login', /* middleware */ (req, res) => {
  */
 
 router.get('/logout', /* middleware */ (req, res) => {
-  console.log('in /api/auth/logout get')
   res.status(200).json({message: '/api/auth/logout get endpoint working'})
 })
  

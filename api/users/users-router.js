@@ -30,8 +30,6 @@ const router = express.Router()
  */
 
 router.get('/', /* middleware */ (req, res) => {
-  // TEST
-  console.log('in /api/users get endpoint')
   res.status(200).json({message: '/api/users get endpoint working'})
 })
 

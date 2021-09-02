@@ -22,7 +22,7 @@ function restricted() {
 */
 async function checkUsernameFree(req, res, next) {
 
-  // TEST
+  // TEST FOR WHEN USER EXISTS
   console.log('in checkUnFree middleware')
 
   const {username} = req.body
@@ -50,7 +50,7 @@ async function checkUsernameFree(req, res, next) {
 */
 async function checkUsernameExists(req, res, next) {
 
-  // TEST
+  // TEST FOR SUCCESSFUL
   console.log('in checkUnExist middleware')
 
   const {username} = req.body
@@ -78,9 +78,6 @@ async function checkUsernameExists(req, res, next) {
   }
 */
 function checkPasswordLength(req, res, next) {
-
-  // TEST
-  console.log('in checkPass middleware')
 
   const {password = 0} = req.body
 
